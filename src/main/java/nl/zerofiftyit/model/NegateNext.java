@@ -14,6 +14,7 @@ package nl.zerofiftyit.model;
  * Instances of this class are designed for simple and stateless operations
  * around the "negate next" flag.
  */
+@SuppressWarnings("LombokGetterMayBeUsed")
 public final class NegateNext {
 
     private boolean negateNext;

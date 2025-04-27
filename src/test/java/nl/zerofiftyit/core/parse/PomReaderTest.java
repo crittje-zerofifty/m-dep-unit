@@ -16,52 +16,42 @@ class PomReaderTest {
     private static final String SAMPLE_POM_PATH = "dist/pom.xml";
 
     @Test
-    void constructor_withValidPomFile_shouldNotThrowException() {
-        // Execute & Verify
+    void testConstructorWithValidPomFileShouldNotThrowException() {
         assertDoesNotThrow(() -> new PomReader(SAMPLE_POM_PATH),
                 "Constructor should not throw an exception with a valid POM file");
     }
 
     @Test
-    void constructor_withInvalidPomFile_shouldThrowIOException() {
-        // Execute & Verify
+    void testConstructorWithInvalidPomFileShouldThrowIOException() {
         assertThrows(IOException.class, () -> new PomReader("non-existent-pom.xml"),
                 "Constructor should throw an IOException with an invalid POM file");
     }
 
     @Test
-    void constructor_withCorruptedPomFile_shouldThrowException(@TempDir Path tempDir) throws IOException {
-        // Setup
+    void testConstructorWithCorruptedPomFileShouldThrowException(@TempDir Path tempDir) throws IOException {
         Path corruptedPomPath = tempDir.resolve("corrupted-pom.xml");
         Files.write(corruptedPomPath, "<project>This is not valid XML</project".getBytes());
 
-        // Execute & Verify
         assertThrows(Exception.class, () -> new PomReader(corruptedPomPath.toString()),
                 "Constructor should throw an exception with a corrupted POM file");
     }
 
     @Test
-    void getAllElements_shouldReturnNonEmptyList() throws IOException {
-        // Setup
+    void testGetAllElementsShouldReturnNonEmptyList() throws IOException {
         PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
 
-        // Execute
         List<PomElement> elements = pomReader.getAllElements();
 
-        // Verify
         assertNotNull(elements, "getAllElements() should not return null");
         assertFalse(elements.isEmpty(), "getAllElements() should not return an empty list");
     }
 
     @Test
-    void getAllElements_shouldContainExpectedElements() throws IOException {
-        // Setup
+    void testGetAllElementsShouldContainExpectedElements() throws IOException {
         PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
 
-        // Execute
         List<PomElement> elements = pomReader.getAllElements();
 
-        // Verify
         assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("modelVersion")),
                 "Elements should contain modelVersion");
         assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("groupId")),
@@ -73,14 +63,11 @@ class PomReaderTest {
     }
 
     @Test
-    void getAllElements_shouldContainNestedElements() throws IOException {
-        // Setup
+    void testGetAllElementsShouldContainNestedElements() throws IOException {
         PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
 
-        // Execute
         List<PomElement> elements = pomReader.getAllElements();
 
-        // Verify
         assertTrue(elements.stream().anyMatch(e -> e.getPath().startsWith("parent")),
                 "Elements should contain parent elements");
         assertTrue(elements.stream().anyMatch(e -> e.getPath().startsWith("dependencies")),
@@ -90,7 +77,7 @@ class PomReaderTest {
     }
 
     @Test
-    void getAllElements_shouldContainElementsWithCorrectValues() throws IOException {
+    void testGetAllElementsShouldContainElementsWithCorrectValues() throws IOException {
         // Setup
         PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
 
@@ -112,7 +99,7 @@ class PomReaderTest {
     }
 
     @Test
-    void getAllElements_withSimplePom_shouldTraverseAllElements(@TempDir Path tempDir) throws IOException {
+    void testGetAllElementsWithSimplePomShouldTraverseAllElements(@TempDir Path tempDir) throws IOException {
         // Setup
         Path simplePomPath = tempDir.resolve("simple-pom.xml");
         String simplePomContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

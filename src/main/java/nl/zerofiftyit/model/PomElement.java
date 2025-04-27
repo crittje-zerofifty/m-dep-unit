@@ -5,15 +5,10 @@ package nl.zerofiftyit.model;
  * This class is immutable and designed to encapsulate a simple mapping between
  * a path string and its corresponding value within a POM structure.
  */
+@SuppressWarnings("LombokGetterMayBeUsed")
 public final class PomElement {
-    /**
-     * The path of the POM element, representing its location in the POM structure.
-     */
-    private final String path;
 
-    /**
-     * The value associated with this POM element.
-     */
+    private final String path;
     private final Object value;
 
     /**
