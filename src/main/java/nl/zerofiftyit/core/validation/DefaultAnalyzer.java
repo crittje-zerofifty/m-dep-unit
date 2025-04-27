@@ -78,25 +78,4 @@ class DefaultAnalyzer {
 
         return resultCaller;
     }
-
-    public ResultCaller haveKey(final String keyValue) {
-
-        List<PomElement> elements = allElements.stream()
-                .filter(element -> element.getPath().contains(givenNode))
-                .collect(Collectors.toList());
-
-        boolean hasKey = !elements.isEmpty();
-
-        if (negateNext.isNegateNext() && hasKey) {
-            errorMessages.add(String.format(
-                    "Key '%s' found in %s where it is not allowed", keyValue, givenNode));
-        } else if (!negateNext.isNegateNext() && !hasKey) {
-            errorMessages.add(String.format(
-                    "Key '%s' not found in %s where it is required", keyValue, givenNode));
-        }
-
-        resultCaller.checkForErrors();
-
-        return resultCaller;
-    }
 }
