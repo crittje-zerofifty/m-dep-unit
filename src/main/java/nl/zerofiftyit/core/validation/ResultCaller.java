@@ -4,6 +4,15 @@ import nl.zerofiftyit.exception.PomValidationException;
 
 import java.util.List;
 
+/**
+ * The {@code ResultCaller} class serves as a utility for managing and validating
+ * potential error states during operations. It allows for the accumulation of error messages
+ * and provides mechanisms to validate these errors, throwing exceptions when the
+ * validation fails.
+ * <p>
+ * This class is always its methods are always terminator of an analysis. Without it won't display the potential
+ * errors.
+ */
 public final class ResultCaller {
 
     private final List<String> errorMessages;
