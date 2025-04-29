@@ -63,6 +63,17 @@ public final class InitAnalyzer implements CheckPom {
         return new InitAnalyzer(pomPath);
     }
 
+    /**
+     * Analyzes the provided POM structure from the given node and returns an
+     * {@code Inclusion} object containing a {@code PomAnalyzer} instance for
+     * further validation or analysis. This is the most generic method for
+     * analysis.
+     *
+     * @param givenNode the initial node within the POM structure where analysis should begin
+     * @return an {@code Inclusion<PomAnalyzer>} instance that wraps a {@code PomAnalyzer}
+     *         configured to analyze the specified POM node with the current state of
+     *         negation and error handling logic
+     */
     @Override
     public Inclusion<PomAnalyzer> checking(final String givenNode) {
         ResultCaller resultCaller = new ResultCaller(errorMessages);

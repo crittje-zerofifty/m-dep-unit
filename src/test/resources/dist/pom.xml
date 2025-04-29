@@ -10,4 +10,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <properties/>
+
+    <dependencies>
+        <dependency>
+            <groupId>test</groupId>
+            <artifactId>test</artifactId>
+            <version>test</version>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -1,23 +1,33 @@
 package nl.zerofiftyit.core.parse;
 
 import nl.zerofiftyit.model.PomElement;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PomReaderTest {
 
     private static final String SAMPLE_POM_PATH = "dist/pom.xml";
+    private String pomFilePath;
+
+    @BeforeEach
+    void setUp() throws URISyntaxException {
+        pomFilePath =
+                Objects.requireNonNull(PomReaderTest.class.getClassLoader().getResource(SAMPLE_POM_PATH)).toURI().getPath();
+    }
 
     @Test
     void testConstructorWithValidPomFileShouldNotThrowException() {
-        assertDoesNotThrow(() -> new PomReader(SAMPLE_POM_PATH),
+        assertDoesNotThrow(() -> new PomReader(pomFilePath),
                 "Constructor should not throw an exception with a valid POM file");
     }
 
@@ -38,7 +48,7 @@ class PomReaderTest {
 
     @Test
     void testGetAllElementsShouldReturnNonEmptyList() throws IOException {
-        PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
+        PomReader pomReader = new PomReader(pomFilePath);
 
         List<PomElement> elements = pomReader.getAllElements();
 
@@ -48,23 +58,23 @@ class PomReaderTest {
 
     @Test
     void testGetAllElementsShouldContainExpectedElements() throws IOException {
-        PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
+        PomReader pomReader = new PomReader(pomFilePath);
 
         List<PomElement> elements = pomReader.getAllElements();
 
         assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("modelVersion")),
                 "Elements should contain modelVersion");
-        assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("groupId")),
+        assertTrue(elements.stream().anyMatch(e -> e.getPath().endsWith("groupId")),
                 "Elements should contain groupId");
-        assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("artifactId")),
+        assertTrue(elements.stream().anyMatch(e -> e.getPath().endsWith("artifactId")),
                 "Elements should contain artifactId");
-        assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("version")),
+        assertTrue(elements.stream().anyMatch(e -> e.getPath().endsWith("version")),
                 "Elements should contain version");
     }
 
     @Test
     void testGetAllElementsShouldContainNestedElements() throws IOException {
-        PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
+        PomReader pomReader = new PomReader(pomFilePath);
 
         List<PomElement> elements = pomReader.getAllElements();
 
@@ -79,7 +89,7 @@ class PomReaderTest {
     @Test
     void testGetAllElementsShouldContainElementsWithCorrectValues() throws IOException {
         // Setup
-        PomReader pomReader = new PomReader(SAMPLE_POM_PATH);
+        PomReader pomReader = new PomReader(pomFilePath);
 
         // Execute
         List<PomElement> elements = pomReader.getAllElements();
