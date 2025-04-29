@@ -1,32 +1,15 @@
 package nl.zerofiftyit.core.validation;
 
-import nl.zerofiftyit.core.parse.PomReaderTest;
 import nl.zerofiftyit.dsl.Inclusion;
-import nl.zerofiftyit.model.NegateNext;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class InitAnalyzerTest {
-
-    private List<String> errorMessages;
-    private NegateNext negateNext;
-
-    @BeforeEach
-    void setUp() {
-
-        errorMessages = new ArrayList<>();
-        negateNext = mock(NegateNext.class);
-
-    }
 
     @Test
     void testAnalyzePomWithDefaultPomFile() throws IOException {

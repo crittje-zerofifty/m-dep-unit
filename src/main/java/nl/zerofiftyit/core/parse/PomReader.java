@@ -16,10 +16,6 @@ import java.util.Map;
  */
 public final class PomReader {
 
-    /**
-     * The parsed POM data stored as a map structure.
-     * This map contains all elements from the POM file organized by their paths.
-     */
     private final Map<String, Object> pomData;
 
     /**
