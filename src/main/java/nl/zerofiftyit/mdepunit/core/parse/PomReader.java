@@ -5,10 +5,9 @@ import nl.zerofiftyit.mdepunit.model.PomElement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * A class for reading Maven POM (Project Object Model) files.
@@ -37,18 +36,18 @@ public final class PomReader {
      * objects. Each element represents a specific path-value pair within the structure
      * of the POM file.
      *
-     * @return a set of PomElement objects representing all paths and their corresponding
+     * @return a list of PomElement objects representing all paths and their corresponding
      * values from the POM file. The set will be non-null and will include nested
      * elements if present in the POM file.
      */
-    public Set<PomElement> getAllElements() {
-        Set<PomElement> elements = new HashSet<>();
+    public List<PomElement> getAllElements() {
+        List<PomElement> elements = new ArrayList<>();
         traverseMap("", pomData, elements);
         return elements;
     }
 
     private void traverseMap(final String path, final Object value,
-                             final Set<PomElement> elements) {
+                             final List<PomElement> elements) {
         if (value instanceof Map) {
             Map<String, Object> map = (Map<String, Object>) value;
             map.forEach((key, val) -> {

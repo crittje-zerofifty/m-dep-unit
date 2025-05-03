@@ -8,9 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,18 +21,18 @@ import static org.mockito.Mockito.when;
 class DefaultAnalyzerTest {
 
     private DefaultAnalyzer testable;
-    private Set<PomElement> pomElements;
+    private List<PomElement> pomElements;
     private ResultCaller resultCaller;
     private NegateNext negateNext;
-    private Set<String> errorMessages;
+    private List<String> errorMessages;
 
     @BeforeEach
     public void setup() {
 
-        pomElements = new HashSet<>();
+        pomElements = new ArrayList<>();
         resultCaller = mock(ResultCaller.class);
         negateNext = mock(NegateNext.class);
-        errorMessages = new HashSet<>();
+        errorMessages = new ArrayList<>();
 
         testable = new DefaultAnalyzer("dependencies.dependency", pomElements, resultCaller, negateNext, errorMessages);
     }

@@ -1,5 +1,6 @@
 package nl.zerofiftyit.mdepunit.api;
 
+import nl.zerofiftyit.mdepunit.core.validation.ModuleAnalyzer;
 import nl.zerofiftyit.mdepunit.dsl.Inclusion;
 import nl.zerofiftyit.mdepunit.core.validation.PomAnalyzer;
 
@@ -32,4 +33,15 @@ public interface CheckPom {
      *         further dependency-related checks and validations.
      */
 //    Inclusion<DependenciesDependencyAnalyzer> checkingDependenciesDependency();
+
+    /**
+     * Provides an {@code Inclusion<ModuleAnalyzer>} instance for analyzing
+     * and validating modules defined in a Maven POM file. This method enables
+     * checking whether modules exist, ensuring they contain a `pom.xml` file,
+     * and performing additional validations on the specified modules.
+     *
+     * @return an {@code Inclusion<ModuleAnalyzer>} instance, allowing for further
+     *         validation, checks, or operations related to the defined modules.
+     */
+    Inclusion<ModuleAnalyzer> checkingModule();
 }

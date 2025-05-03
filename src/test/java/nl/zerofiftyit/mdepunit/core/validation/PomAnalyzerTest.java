@@ -10,8 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,14 +23,14 @@ import static org.mockito.Mockito.when;
 class PomAnalyzerTest {
 
     private PomAnalyzer testable;
-    private Set<PomElement> propertyPomElements;
-    private Set<String> errorMessages;
+    private List<PomElement> propertyPomElements;
+    private List<String> errorMessages;
     private ResultCaller resultCaller;
     private NegateNext negateNext;
 
     @BeforeEach
     void setUp() {
-        propertyPomElements = new HashSet<>();
+        propertyPomElements = new ArrayList<>();
         propertyPomElements.add(new PomElement("properties", new ArrayList<>()));
         propertyPomElements.add(new PomElement("properties.java.version", "11"));
 
@@ -37,7 +38,7 @@ class PomAnalyzerTest {
                 propertyPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
     }
 
     @AfterEach
@@ -52,7 +53,7 @@ class PomAnalyzerTest {
                 propertyPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
@@ -69,7 +70,7 @@ class PomAnalyzerTest {
                 propertyPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
@@ -87,7 +88,7 @@ class PomAnalyzerTest {
                 propertyPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
@@ -104,7 +105,7 @@ class PomAnalyzerTest {
                 propertyPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
@@ -118,7 +119,7 @@ class PomAnalyzerTest {
     @Disabled
     void testHavePluginExecutionInPhaseAndGoalWhenShouldAndHas() {
 
-        Set<PomElement> pluginPomElements = new HashSet<>();
+        List<PomElement> pluginPomElements = new ArrayList<>();
         pluginPomElements.add(new PomElement("build.plugins.plugin[0].artifactId", "spotless-maven-plugin"));
         pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.goals.goal", "check"));
         pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.phase", "compile"));
@@ -127,7 +128,7 @@ class PomAnalyzerTest {
                 pluginPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
@@ -147,7 +148,7 @@ class PomAnalyzerTest {
         execution.put("goals", goals);
         goals.put("goal", "check");
 
-        Set<PomElement> pluginPomElements = new HashSet<>();
+        List<PomElement> pluginPomElements = new ArrayList<>();
         pluginPomElements.add(new PomElement("build.plugins.plugin[0].artifactId", "spotless-maven-plugin"));
         pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution", execution));
         pluginPomElements.add(new PomElement("build.plugins.plugin.executions.execution.goals", goals));
@@ -158,7 +159,7 @@ class PomAnalyzerTest {
                 pluginPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
@@ -171,7 +172,7 @@ class PomAnalyzerTest {
     @Test
     @Disabled
     void testHavePluginExecutionInPhaseAndGoalWhenShouldNotAndHas() {
-        Set<PomElement> pluginPomElements = new HashSet<>();
+        List<PomElement> pluginPomElements = new ArrayList<>();
         pluginPomElements.add(new PomElement("build.plugins.plugin.groupId", "com.diffplug.spotless"));
         pluginPomElements.add(new PomElement("build.plugins.plugin.artifactId", "spotless-maven-plugin"));
         pluginPomElements.add(new PomElement("build.plugins.plugin.version", "${spotless.version}"));
@@ -182,7 +183,7 @@ class PomAnalyzerTest {
                 pluginPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
@@ -195,7 +196,7 @@ class PomAnalyzerTest {
     @Test
     @Disabled
     void testHavePluginExecutionInPhaseAndGoalWhenShouldNotAndHasNot() {
-        Set<PomElement> pluginPomElements = new HashSet<>();
+        List<PomElement> pluginPomElements = new ArrayList<>();
         pluginPomElements.add(new PomElement("build.plugins.plugin.groupId", "com.diffplug.spotless"));
         pluginPomElements.add(new PomElement("build.plugins.plugin.artifactId", "spotless-maven-plugin"));
 
@@ -203,7 +204,7 @@ class PomAnalyzerTest {
                 pluginPomElements,
                 resultCaller = mock(ResultCaller.class),
                 negateNext = mock(NegateNext.class),
-                errorMessages = new HashSet<>());
+                errorMessages = new ArrayList<>());
 
         when(negateNext.isNegateNext()).thenReturn(true);
 

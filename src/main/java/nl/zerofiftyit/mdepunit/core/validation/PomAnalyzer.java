@@ -5,16 +5,17 @@ import nl.zerofiftyit.mdepunit.model.ExecutionMap;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class PomAnalyzer extends DefaultAnalyzer {
 
     private final String givenNode;
-    private Set<PomElement> pomElements;
+    private List<PomElement> pomElements;
     private final ResultCaller resultCaller;
     private final NegateNext negateNext;
-    private final Set<String> errorMessages;
+    private final List<String> errorMessages;
 
     /**
      * Constructs a new instance of the {@code PomAnalyzer} class, which extends the functionality
@@ -28,9 +29,9 @@ public final class PomAnalyzer extends DefaultAnalyzer {
      * @param negateNext a {@code NegateNext} utility class controlling conditional negation logic
      * @param errorMessages a set of error messages for recording validation errors during analysis
      */
-    public PomAnalyzer(final String givenNode, final Set<PomElement> pomElements,
+    public PomAnalyzer(final String givenNode, final List<PomElement> pomElements,
                        final ResultCaller resultCaller, final NegateNext negateNext,
-                       final Set<String> errorMessages) {
+                       final List<String> errorMessages) {
         super(givenNode, pomElements, resultCaller, negateNext, errorMessages);
         this.givenNode = givenNode;
         this.pomElements = pomElements;
@@ -52,13 +53,13 @@ public final class PomAnalyzer extends DefaultAnalyzer {
      */
     public Statement<PomAnalyzer> havePluginExecutionInPhaseForGoal(final String pluginArtifactId,
                                                        final String phase, final String goal) {
-        Set<ExecutionMap> plugins = pomElements.stream()
+        List<ExecutionMap> plugins = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith("executions.execution"))
                 .map(PomElement::getValue)
                 .map(ExecutionMap::new)
                 .filter(e -> goal.equals(e.getGoal()) && phase.equals(e.getPhase()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         boolean hasPluginInPhase = !plugins.isEmpty();
 
@@ -99,10 +100,10 @@ public final class PomAnalyzer extends DefaultAnalyzer {
      * @return the current instance of {@code ResultCaller}, allowing further method chaining.
      */
     public Statement<PomAnalyzer> haveProperty(final String propertyName) {
-        Set<PomElement> properties = pomElements.stream()
+        List<PomElement> properties = pomElements.stream()
                 .filter(element -> element.getPath().startsWith("properties"))
                 .filter(element -> element.getPath().contains(propertyName))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         boolean hasProperty = !properties.isEmpty();
 

@@ -4,20 +4,20 @@ import nl.zerofiftyit.mdepunit.exception.PomValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ResultCallerTest {
 
     private ResultCaller testable;
-    private Set<String> errorMessages;
+    private List<String> errorMessages;
 
     @BeforeEach
     void setup() {
 
-        errorMessages = new HashSet<>();
+        errorMessages = new ArrayList<>();
 
         testable = new ResultCaller(errorMessages);
     }

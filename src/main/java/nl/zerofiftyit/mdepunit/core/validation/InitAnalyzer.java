@@ -7,9 +7,7 @@ import nl.zerofiftyit.mdepunit.model.NegateNext;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * The {@code PomAnalyzer} class provides functionality for analyzing and
@@ -27,12 +25,12 @@ import java.util.Set;
  */
 public final class InitAnalyzer implements CheckPom {
 
-    private final Set<String> errorMessages;
+    private final List<String> errorMessages;
     private final PomReader pomReader;
     private final NegateNext negateNext;
 
     private InitAnalyzer(final String pomFile) throws IOException {
-        this.errorMessages = new HashSet<>();
+        this.errorMessages = new ArrayList<>();
         this.negateNext = new NegateNext();
         pomReader = new PomReader(pomFile);
     }
@@ -83,5 +81,21 @@ public final class InitAnalyzer implements CheckPom {
                 new PomAnalyzer(givenNode, pomReader.getAllElements(), resultCaller, negateNext,
                         errorMessages), negateNext
         );
+    }
+
+    /**
+     * Provides an {@code Inclusion<ModuleAnalyzer>} instance for analyzing
+     * and validating modules defined in a Maven POM file. This method enables
+     * checking whether modules exist, ensuring they contain a `pom.xml` file,
+     * and performing additional validations on the specified modules.
+     *
+     * @return an {@code Inclusion<ModuleAnalyzer>} instance, allowing for further
+     *         validation, checks, or operations related to the defined modules.
+     */
+    @Override
+    public Inclusion<ModuleAnalyzer> checkingModule() {
+        ResultCaller resultCaller = new ResultCaller(errorMessages);
+        return new Inclusion<>(new ModuleAnalyzer("modules.module", pomReader.getAllElements(), resultCaller,
+                negateNext, errorMessages), negateNext);
     }
 }

@@ -5,19 +5,18 @@ import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DefaultAnalyzer {
 
     private final String givenNode;
-    private Set<PomElement> pomElements;
+    private List<PomElement> pomElements;
     private final ResultCaller resultCaller;
     private final NegateNext negateNext;
-    private final Set<String> errorMessages;
+    private final List<String> errorMessages;
 
-    public DefaultAnalyzer(final String givenNode, final Set<PomElement> pomElements, final ResultCaller resultCaller,
-                           final NegateNext negateNext, final Set<String> errorMessages) {
+    public DefaultAnalyzer(final String givenNode, final List<PomElement> pomElements, final ResultCaller resultCaller,
+                           final NegateNext negateNext, final List<String> errorMessages) {
         this.givenNode = givenNode;
         this.pomElements = pomElements;
         this.resultCaller = resultCaller;
@@ -33,10 +32,10 @@ public class DefaultAnalyzer {
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
     public Statement<DefaultAnalyzer> haveTag(final String tagName) {
-        Set<PomElement> elements = pomElements.stream()
+        List<PomElement> elements = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith(tagName))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         boolean hasTag = !elements.isEmpty();
 
@@ -52,6 +51,7 @@ public class DefaultAnalyzer {
         }
 
         resultCaller.checkForErrors();
+        pomElements = elements;
 
         return new Statement<>(this, resultCaller, negateNext);
     }
@@ -64,13 +64,13 @@ public class DefaultAnalyzer {
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
     public Statement<DefaultAnalyzer> containValue(final String value) {
-        Set<PomElement> elements = pomElements.stream()
+        List<PomElement> elements = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> {
                     Object elementValue = element.getValue();
-                    return elementValue != null && elementValue.toString().contains(value);
+                    return elementValue != null && elementValue.toString().equals(value);
                 })
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         boolean containsValue = !elements.isEmpty();
 
@@ -87,5 +87,9 @@ public class DefaultAnalyzer {
         pomElements = elements;
 
         return new Statement<>(this, resultCaller, negateNext);
+    }
+
+    protected List<PomElement> getPomElements() {
+        return pomElements;
     }
 }

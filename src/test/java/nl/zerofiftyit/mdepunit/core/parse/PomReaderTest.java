@@ -51,7 +51,7 @@ class PomReaderTest {
     void testGetAllElementsShouldReturnNonEmptySet() throws IOException {
         PomReader pomReader = new PomReader(pomFilePath);
 
-        Set<PomElement> elements = pomReader.getAllElements();
+        List<PomElement> elements = pomReader.getAllElements();
 
         assertNotNull(elements, "getAllElements() should not return null");
         assertFalse(elements.isEmpty(), "getAllElements() should not return an empty set");
@@ -61,7 +61,7 @@ class PomReaderTest {
     void testGetAllElementsShouldContainExpectedElements() throws IOException {
         PomReader pomReader = new PomReader(pomFilePath);
 
-        Set<PomElement> elements = pomReader.getAllElements();
+        List<PomElement> elements = pomReader.getAllElements();
 
         assertTrue(elements.stream().anyMatch(e -> e.getPath().equals("modelVersion")),
                 "Elements should contain modelVersion");
@@ -77,7 +77,7 @@ class PomReaderTest {
     void testGetAllElementsShouldContainNestedElements() throws IOException {
         PomReader pomReader = new PomReader(pomFilePath);
 
-        Set<PomElement> elements = pomReader.getAllElements();
+        List<PomElement> elements = pomReader.getAllElements();
 
         assertTrue(elements.stream().anyMatch(e -> e.getPath().startsWith("parent")),
                 "Elements should contain parent elements");
@@ -93,7 +93,7 @@ class PomReaderTest {
         PomReader pomReader = new PomReader(pomFilePath);
 
         // Execute
-        Set<PomElement> elements = pomReader.getAllElements();
+        List<PomElement> elements = pomReader.getAllElements();
 
         // Verify
         elements.stream()
@@ -136,7 +136,7 @@ class PomReaderTest {
         PomReader pomReader = new PomReader(simplePomPath.toString());
 
         // Execute
-        Set<PomElement> elements = pomReader.getAllElements();
+        List<PomElement> elements = pomReader.getAllElements();
 
         // Verify
         assertNotNull(elements, "getAllElements() should not return null");

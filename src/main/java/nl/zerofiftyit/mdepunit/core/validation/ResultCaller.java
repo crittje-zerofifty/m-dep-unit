@@ -2,6 +2,7 @@ package nl.zerofiftyit.mdepunit.core.validation;
 
 import nl.zerofiftyit.mdepunit.exception.PomValidationException;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,8 +16,10 @@ import java.util.Set;
  */
 public final class ResultCaller {
 
-    private final Set<String> errorMessages;
+    private final List<String> errorMessages;
     private final StringBuilder stringBuilder;
+
+    private boolean hasErrors;
 
     /**
      * Constructs a {@code ResultCaller} instance with the provided list of error messages.
@@ -25,7 +28,7 @@ public final class ResultCaller {
      *
      * @param errorMessages the list of error messages to be managed by this instance
      */
-    public ResultCaller(final Set<String> errorMessages) {
+    public ResultCaller(final List<String> errorMessages) {
         this.errorMessages = errorMessages;
         this.stringBuilder = new StringBuilder();
     }
@@ -41,7 +44,7 @@ public final class ResultCaller {
      * @throws PomValidationException if validation fails due to the presence of error messages.
      */
     public void validate() {
-        if (!errorMessages.isEmpty()) {
+        if (hasErrors) {
             displayError();
         }
     }
@@ -70,10 +73,12 @@ public final class ResultCaller {
      */
     public void checkForErrors() {
         if (!errorMessages.isEmpty()) {
+            hasErrors = true;
             stringBuilder.append("Error(s) occurred:\n");
             errorMessages.stream()
                     .map(errorMessage -> errorMessage + "\n")
                     .forEach(stringBuilder::append);
+            errorMessages.clear();
         }
     }
 
@@ -83,6 +88,7 @@ public final class ResultCaller {
     public void clearErrors() {
         errorMessages.clear();
         stringBuilder.setLength(0);
+        hasErrors = false;
     }
 
     private void displayError() {
