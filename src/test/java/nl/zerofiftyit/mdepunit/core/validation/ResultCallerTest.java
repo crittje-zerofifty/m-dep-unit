@@ -25,7 +25,6 @@ class ResultCallerTest {
     @Test
     void testValidateWhenNoErrorsDoesNotThrowException() {
 
-
         assertDoesNotThrow(() -> testable.validate(),
                 "validate() should not throw an exception when no errors are present");
     }
@@ -34,6 +33,8 @@ class ResultCallerTest {
     void testValidateWhenErrorsArePresentDoesThrow() {
 
         errorMessages.add("error1");
+
+        testable.checkForErrors();
 
         assertThrows(PomValidationException.class, () -> testable.validate());
     }
@@ -50,10 +51,12 @@ class ResultCallerTest {
 
         errorMessages.add("error1");
 
+        testable.checkForErrors();
+
         Exception e = assertThrows(PomValidationException.class, () -> testable.validate("reason"));
 
         assertTrue(e.getMessage().contains("reason"));
-        assertEquals(1, errorMessages.size());
+        assertTrue(errorMessages.isEmpty());
 
     }
 
@@ -68,7 +71,7 @@ class ResultCallerTest {
 
         assertTrue(e.getMessage().contains("reason"));
         assertTrue(e.getMessage().contains("error1"));
-        assertEquals(1, errorMessages.size());
+        assertTrue(errorMessages.isEmpty());
     }
 
     @Test
