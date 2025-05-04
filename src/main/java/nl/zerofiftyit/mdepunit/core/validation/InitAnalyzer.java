@@ -95,7 +95,7 @@ public final class InitAnalyzer implements CheckPom {
     @Override
     public Inclusion<ModuleAnalyzer> checkingModule() {
         ResultCaller resultCaller = new ResultCaller(errorMessages);
-        return new Inclusion<>(new ModuleAnalyzer("modules.module", pomReader.getAllElements(), resultCaller,
-                negateNext, errorMessages), negateNext);
+        return new Inclusion<>(new ModuleAnalyzer("modules.module", pomReader.getAllElements(),
+                resultCaller, negateNext, errorMessages), negateNext);
     }
 }

@@ -6,7 +6,6 @@ import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class PomAnalyzer extends DefaultAnalyzer {

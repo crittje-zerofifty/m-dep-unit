@@ -3,7 +3,6 @@ package nl.zerofiftyit.mdepunit.core.validation;
 import nl.zerofiftyit.mdepunit.exception.PomValidationException;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * The {@code ResultCaller} class serves as a utility for managing and validating

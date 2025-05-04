@@ -15,8 +15,23 @@ public class DefaultAnalyzer {
     private final NegateNext negateNext;
     private final List<String> errorMessages;
 
-    public DefaultAnalyzer(final String givenNode, final List<PomElement> pomElements, final ResultCaller resultCaller,
-                           final NegateNext negateNext, final List<String> errorMessages) {
+    /**
+     * Constructs an instance of DefaultAnalyzer with the given parameters.
+     *
+     * @param givenNode the name of the node to be analyzed, typically representing
+     *                  a specific segment of a POM (Project Object Model) structure.
+     * @param pomElements a list of POM elements to analyze, each containing a path
+     *                    and its associated value within the POM structure.
+     * @param resultCaller a utility class responsible for handling and validating
+     *                     error states during the analysis process.
+     * @param negateNext a utility flag indicating whether the next operation
+     *                   should be negated during the analysis.
+     * @param errorMessages a list to capture and store any error messages
+     *                      encountered throughout the analysis.
+     */
+    public DefaultAnalyzer(final String givenNode, final List<PomElement> pomElements,
+                           final ResultCaller resultCaller, final NegateNext negateNext,
+                           final List<String> errorMessages) {
         this.givenNode = givenNode;
         this.pomElements = pomElements;
         this.resultCaller = resultCaller;
@@ -89,7 +104,7 @@ public class DefaultAnalyzer {
         return new Statement<>(this, resultCaller, negateNext);
     }
 
-    protected List<PomElement> getPomElements() {
+    protected final List<PomElement> getPomElements() {
         return pomElements;
     }
 }

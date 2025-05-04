@@ -40,4 +40,4 @@ build/
 .DS_Store
 
 /src/test/java/it/
-/test-module/
+test-module/
