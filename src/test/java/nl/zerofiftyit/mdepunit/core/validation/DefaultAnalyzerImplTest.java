@@ -18,9 +18,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class DefaultAnalyzerTest {
+class DefaultAnalyzerImplTest {
 
-    private DefaultAnalyzer testable;
+    private DefaultAnalyzerImpl testable;
     private List<PomElement> pomElements;
     private ResultCaller resultCaller;
     private NegateNext negateNext;
@@ -34,7 +34,7 @@ class DefaultAnalyzerTest {
         negateNext = mock(NegateNext.class);
         errorMessages = new ArrayList<>();
 
-        testable = new DefaultAnalyzer("dependencies.dependency", pomElements, resultCaller, negateNext, errorMessages);
+        testable = new DefaultAnalyzerImpl("dependencies.dependency", pomElements, resultCaller, negateNext, errorMessages);
     }
 
     @AfterEach
@@ -56,7 +56,7 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
-        Statement<DefaultAnalyzer> result  = testable.haveTag("version");
+        Statement<DefaultAnalyzerImpl> result  = testable.haveTag("version");
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
@@ -76,7 +76,7 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
-        Statement<DefaultAnalyzer> result = testable.haveTag("version");
+        Statement<DefaultAnalyzerImpl> result = testable.haveTag("version");
 
         assertNotNull(result);
         assertEquals(2, errorMessages.size());
@@ -96,7 +96,7 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
-        Statement<DefaultAnalyzer> result  = testable.haveTag("version");
+        Statement<DefaultAnalyzerImpl> result  = testable.haveTag("version");
 
         assertNotNull(result);
         assertEquals(1, errorMessages.size());
@@ -116,7 +116,7 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
-        Statement<DefaultAnalyzer> result = testable.haveTag("version");
+        Statement<DefaultAnalyzerImpl> result = testable.haveTag("version");
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
@@ -134,11 +134,11 @@ class DefaultAnalyzerTest {
         pomElements.add(moduleCustomer);
         pomElements.add(moduleProduct);
 
-        testable = new DefaultAnalyzer("modules.module", pomElements, resultCaller, negateNext, errorMessages);
+        testable = new DefaultAnalyzerImpl("modules.module", pomElements, resultCaller, negateNext, errorMessages);
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
-        Statement<DefaultAnalyzer> result = testable.containValue("customer");
+        Statement<DefaultAnalyzerImpl> result = testable.containValue("customer");
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
@@ -156,11 +156,11 @@ class DefaultAnalyzerTest {
         pomElements.add(moduleCustomer);
         pomElements.add(moduleProduct);
 
-        testable = new DefaultAnalyzer("modules.module", pomElements, resultCaller, negateNext, errorMessages);
+        testable = new DefaultAnalyzerImpl("modules.module", pomElements, resultCaller, negateNext, errorMessages);
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
-        Statement<DefaultAnalyzer> result = testable.containValue("customer");
+        Statement<DefaultAnalyzerImpl> result = testable.containValue("customer");
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
@@ -180,9 +180,9 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(false);
 
-        testable = new DefaultAnalyzer("modules.module", pomElements, resultCaller, negateNext, errorMessages);
+        testable = new DefaultAnalyzerImpl("modules.module", pomElements, resultCaller, negateNext, errorMessages);
 
-        Statement<DefaultAnalyzer> result = testable.containValue("notexisting");
+        Statement<DefaultAnalyzerImpl> result = testable.containValue("notexisting");
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
@@ -202,14 +202,73 @@ class DefaultAnalyzerTest {
 
         when(negateNext.isNegateNext()).thenReturn(true);
 
-        testable = new DefaultAnalyzer("modules.module", pomElements, resultCaller, negateNext, errorMessages);
+        testable = new DefaultAnalyzerImpl("modules.module", pomElements, resultCaller, negateNext, errorMessages);
 
-        Statement<DefaultAnalyzer> result = testable.containValue("notexisting");
+        Statement<DefaultAnalyzerImpl> result = testable.containValue("notexisting");
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
         verify(resultCaller).checkForErrors();
-
     }
 
+    @Test
+    public void testEqualsValueWhileItExpected() {
+        PomElement element = new PomElement("project.version", "1.0.0");
+        pomElements.add(element);
+
+        testable = new DefaultAnalyzerImpl("project.version", pomElements, resultCaller, negateNext, errorMessages);
+
+        when(negateNext.isNegateNext()).thenReturn(false);
+
+        Statement<DefaultAnalyzerImpl> result = testable.equalsValue("1.0.0");
+
+        assertNotNull(result);
+        assertTrue(errorMessages.isEmpty());
+    }
+
+    @Test
+    public void testEqualsValueWhileItNotExpected() {
+        PomElement element = new PomElement("project.version", "1.0.0");
+        pomElements.add(element);
+
+        testable = new DefaultAnalyzerImpl("project.version", pomElements, resultCaller, negateNext, errorMessages);
+
+        when(negateNext.isNegateNext()).thenReturn(true);
+
+        Statement<DefaultAnalyzerImpl> result = testable.equalsValue("1.0.0");
+
+        assertNotNull(result);
+        assertFalse(errorMessages.isEmpty());
+    }
+
+    @Test
+    public void testEqualsValueWhileExpectedHasNot() {
+        PomElement element = new PomElement("project.version", "1.0.0");
+        pomElements.add(element);
+
+        testable = new DefaultAnalyzerImpl("project.version", pomElements, resultCaller, negateNext, errorMessages);
+
+        when(negateNext.isNegateNext()).thenReturn(false);
+
+        Statement<DefaultAnalyzerImpl> result = testable.equalsValue("2.0.0");
+
+        assertNotNull(result);
+        assertFalse(errorMessages.isEmpty());
+    }
+
+    @Test
+    public void testEqualsValueWhileItNotExpectedAndShouldNot() {
+        PomElement element = new PomElement("project.version", "1.0.0");
+        pomElements.add(element);
+
+        testable = new DefaultAnalyzerImpl("project.version", pomElements, resultCaller, negateNext, errorMessages);
+
+        when(negateNext.isNegateNext()).thenReturn(true);
+
+        Statement<DefaultAnalyzerImpl> result = testable.equalsValue("2.0.0");
+
+        assertNotNull(result);
+        assertTrue(errorMessages.isEmpty());
+    }
 }
+

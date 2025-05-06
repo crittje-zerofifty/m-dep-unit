@@ -8,7 +8,7 @@ import nl.zerofiftyit.mdepunit.model.PomElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class PomAnalyzer extends DefaultAnalyzer {
+public final class PomAnalyzer extends DefaultAnalyzerImpl {
 
     private final String givenNode;
     private List<PomElement> pomElements;
@@ -18,9 +18,7 @@ public final class PomAnalyzer extends DefaultAnalyzer {
 
     /**
      * Constructs a new instance of the {@code PomAnalyzer} class, which extends the functionality
-     * of {@code DefaultAnalyzer}. The {@code PomAnalyzer} is designed to analyze Maven POM
-     * (Project Object Model) structures and validate plugin executions, phases, and goals
-     * based on specific rules and conditions.
+     * of {@code DefaultAnalyzer} with additional convenience methods for analyzing and validating.
      *
      * @param givenNode the initial node within the POM structure where analysis should begin
      * @param pomElements a set of {@code PomElement} objects representing POM nodes for analysis
@@ -51,7 +49,8 @@ public final class PomAnalyzer extends DefaultAnalyzer {
      *         for the analysis.
      */
     public Statement<PomAnalyzer> havePluginExecutionInPhaseForGoal(final String pluginArtifactId,
-                                                       final String phase, final String goal) {
+                                                                    final String phase,
+                                                                    final String goal) {
         List<ExecutionMap> plugins = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith("executions.execution"))

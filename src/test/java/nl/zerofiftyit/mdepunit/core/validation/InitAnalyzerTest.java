@@ -33,4 +33,12 @@ class InitAnalyzerTest {
 
         assertEquals(Inclusion.class, result.getClass());
     }
+
+    @Test
+    void testCheckingModuleForGivenNodeReturnsInclusion() throws IOException {
+
+        Inclusion<ModuleAnalyzer> result = InitAnalyzer.analyzePom().checkingModule();
+
+        assertEquals(Inclusion.class, result.getClass());
+    }
 }

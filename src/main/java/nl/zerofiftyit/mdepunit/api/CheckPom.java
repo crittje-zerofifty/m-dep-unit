@@ -22,18 +22,6 @@ public interface CheckPom {
      */
     Inclusion<PomAnalyzer> checking(String givenNode);
 
-    /*
-     * Provides access to an {@code Inclusion<DependenciesDependencyAnalyzer>}
-     * to perform checks and validations on the "dependencies.dependency"
-     * elements within a Maven POM file. This method allows the caller
-     * to perform specific dependency-related analyses and obtain results
-     * or errors if any discrepancies exist. This method contains additional convenience methods.
-     *
-     * @return an {@code Inclusion<DependenciesDependencyAnalyzer>} that enables
-     *         further dependency-related checks and validations.
-     */
-//    Inclusion<DependenciesDependencyAnalyzer> checkingDependenciesDependency();
-
     /**
      * Provides an {@code Inclusion<ModuleAnalyzer>} instance for analyzing
      * and validating modules defined in a Maven POM file. This method enables

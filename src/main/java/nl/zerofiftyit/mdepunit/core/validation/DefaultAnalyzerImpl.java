@@ -1,13 +1,15 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
+import nl.zerofiftyit.mdepunit.api.DefaultAnalyzer;
 import nl.zerofiftyit.mdepunit.dsl.Statement;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DefaultAnalyzer {
+public class DefaultAnalyzerImpl implements DefaultAnalyzer {
 
     private final String givenNode;
     private List<PomElement> pomElements;
@@ -29,9 +31,9 @@ public class DefaultAnalyzer {
      * @param errorMessages a list to capture and store any error messages
      *                      encountered throughout the analysis.
      */
-    public DefaultAnalyzer(final String givenNode, final List<PomElement> pomElements,
-                           final ResultCaller resultCaller, final NegateNext negateNext,
-                           final List<String> errorMessages) {
+    public DefaultAnalyzerImpl(final String givenNode, final List<PomElement> pomElements,
+                               final ResultCaller resultCaller, final NegateNext negateNext,
+                               final List<String> errorMessages) {
         this.givenNode = givenNode;
         this.pomElements = pomElements;
         this.resultCaller = resultCaller;
@@ -46,7 +48,8 @@ public class DefaultAnalyzer {
      *                "artifactId".
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
-    public Statement<DefaultAnalyzer> haveTag(final String tagName) {
+    @Override
+    public Statement<DefaultAnalyzerImpl> haveTag(final String tagName) {
         List<PomElement> elements = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith(tagName))
@@ -78,13 +81,28 @@ public class DefaultAnalyzer {
      * @param value The value to search for within the given node.
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
-    public Statement<DefaultAnalyzer> containValue(final String value) {
+    @Override
+    public Statement<DefaultAnalyzerImpl> containValue(final String value) {
+        return filterValue(element -> {
+            Object elementValue = element.getValue();
+            return elementValue != null && elementValue.toString().contains(value);
+        }, value);
+    }
+
+    @Override
+    public final Statement<DefaultAnalyzerImpl> equalsValue(final String value) {
+        return filterValue(element -> {
+            Object elementValue = element.getValue();
+            return elementValue != null && elementValue.toString().contains(value);
+        }, value);
+    }
+
+    private Statement<DefaultAnalyzerImpl> filterValue(final Predicate<PomElement> valuePredicate,
+                                                       final String value) {
+
         List<PomElement> elements = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
-                .filter(element -> {
-                    Object elementValue = element.getValue();
-                    return elementValue != null && elementValue.toString().equals(value);
-                })
+                .filter(valuePredicate)
                 .collect(Collectors.toList());
 
         boolean containsValue = !elements.isEmpty();

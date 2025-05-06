@@ -7,7 +7,7 @@ import nl.zerofiftyit.mdepunit.model.PomElement;
 import java.io.File;
 import java.util.List;
 
-public final class ModuleAnalyzer extends DefaultAnalyzer {
+public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
 
     private List<PomElement> pomElements;
     private final ResultCaller resultCaller;
