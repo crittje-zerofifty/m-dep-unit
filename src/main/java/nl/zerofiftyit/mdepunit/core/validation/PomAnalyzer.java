@@ -1,7 +1,6 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
 import nl.zerofiftyit.mdepunit.dsl.Statement;
-import nl.zerofiftyit.mdepunit.model.ExecutionMap;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 
@@ -35,45 +34,6 @@ public final class PomAnalyzer extends DefaultAnalyzerImpl {
         this.resultCaller = resultCaller;
         this.negateNext = negateNext;
         this.errorMessages = errorMessages;
-    }
-
-    /**
-     * Checks if a specified plugin execution exists in the given Maven phase for a specific goal.
-     * Based on the analyzer's expected state (should or should not), it validates the presence or
-     * absence of the plugin execution and records an error message if the condition is violated.
-     *
-     * @param pluginArtifactId the artifact ID of the plugin to check for.
-     * @param phase the Maven lifecycle phase to check within (e.g., "compile", "test").
-     * @param goal the specific goal of the plugin to validate.
-     * @return a {@code ResultCaller} instance allowing further validation and error handling
-     *         for the analysis.
-     */
-    public Statement<PomAnalyzer> havePluginExecutionInPhaseForGoal(final String pluginArtifactId,
-                                                                    final String phase,
-                                                                    final String goal) {
-        List<ExecutionMap> plugins = pomElements.stream()
-                .filter(element -> element.getPath().startsWith(givenNode))
-                .filter(element -> element.getPath().endsWith("executions.execution"))
-                .map(PomElement::getValue)
-                .map(ExecutionMap::new)
-                .filter(e -> goal.equals(e.getGoal()) && phase.equals(e.getPhase()))
-                .collect(Collectors.toList());
-
-        boolean hasPluginInPhase = !plugins.isEmpty();
-
-        if (negateNext.isNegateNext() && hasPluginInPhase) {
-            errorMessages.add(String.format(
-                    "Plugin '%s' found in phase '%s' for goal '%s' where this is not permitted",
-                    pluginArtifactId, phase, goal));
-        } else if (!negateNext.isNegateNext() && !hasPluginInPhase) {
-            errorMessages.add(String.format(
-                    "Plugin '%s' not found in given phase '%s' for goal '%s'",
-                    pluginArtifactId, phase, goal));
-        }
-
-        resultCaller.checkForErrors();
-
-        return new Statement<>(this, resultCaller, negateNext);
     }
 
     /**

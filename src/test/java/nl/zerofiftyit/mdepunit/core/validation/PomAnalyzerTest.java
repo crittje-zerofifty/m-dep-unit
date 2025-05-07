@@ -5,11 +5,9 @@ import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,105 +105,6 @@ class PomAnalyzerTest {
         when(negateNext.isNegateNext()).thenReturn(true);
 
         Statement<PomAnalyzer> result = testable.haveProperty("not.existing.version");
-
-        assertNotNull(result);
-        assertTrue(errorMessages.isEmpty());
-    }
-
-    @Test
-    @Disabled
-    void testHavePluginExecutionInPhaseAndGoalWhenShouldAndHas() {
-
-        List<PomElement> pluginPomElements = new ArrayList<>();
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].artifactId", "spotless-maven-plugin"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.goals.goal", "check"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.phase", "compile"));
-
-        testable = new PomAnalyzer("build.plugins.plugin",
-                pluginPomElements,
-                resultCaller = mock(ResultCaller.class),
-                negateNext = mock(NegateNext.class),
-                errorMessages = new ArrayList<>());
-
-        when(negateNext.isNegateNext()).thenReturn(false);
-
-        Statement<PomAnalyzer> result = testable
-                .havePluginExecutionInPhaseForGoal("spotless-maven-plugin", "compile", "check");
-
-        assertNotNull(result);
-        assertTrue(errorMessages.isEmpty());
-    }
-
-    @Test
-    @Disabled
-    void testHavePluginExecutionInPhaseAndGoalWhenShouldAndHasNot() {
-        LinkedHashMap<String, Object> goals = new LinkedHashMap<>();
-        LinkedHashMap<String, Object> execution = new LinkedHashMap<>();
-        execution.put("phase", "compile");
-        execution.put("goals", goals);
-        goals.put("goal", "check");
-
-        List<PomElement> pluginPomElements = new ArrayList<>();
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].artifactId", "spotless-maven-plugin"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution", execution));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.executions.execution.goals", goals));
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.goals.goal", "check"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin[0].executions.execution.phase", "compile"));
-
-        testable = new PomAnalyzer("build.plugins.plugin",
-                pluginPomElements,
-                resultCaller = mock(ResultCaller.class),
-                negateNext = mock(NegateNext.class),
-                errorMessages = new ArrayList<>());
-
-        when(negateNext.isNegateNext()).thenReturn(false);
-
-        Statement<PomAnalyzer> result = testable.havePluginExecutionInPhaseForGoal("BLA", "compile", "check");
-
-        assertNotNull(result);
-        assertEquals(1, errorMessages.size());
-    }
-
-    @Test
-    @Disabled
-    void testHavePluginExecutionInPhaseAndGoalWhenShouldNotAndHas() {
-        List<PomElement> pluginPomElements = new ArrayList<>();
-        pluginPomElements.add(new PomElement("build.plugins.plugin.groupId", "com.diffplug.spotless"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.artifactId", "spotless-maven-plugin"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.version", "${spotless.version}"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.executions.execution.goals.goal", "check"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.executions.execution.phase", "compile"));
-
-        testable = new PomAnalyzer("build.plugins.plugin",
-                pluginPomElements,
-                resultCaller = mock(ResultCaller.class),
-                negateNext = mock(NegateNext.class),
-                errorMessages = new ArrayList<>());
-
-        when(negateNext.isNegateNext()).thenReturn(true);
-
-        Statement<PomAnalyzer> result = testable.havePluginExecutionInPhaseForGoal("test", "compile", "check");
-
-        assertNotNull(result);
-        assertEquals(1, errorMessages.size());
-    }
-
-    @Test
-    @Disabled
-    void testHavePluginExecutionInPhaseAndGoalWhenShouldNotAndHasNot() {
-        List<PomElement> pluginPomElements = new ArrayList<>();
-        pluginPomElements.add(new PomElement("build.plugins.plugin.groupId", "com.diffplug.spotless"));
-        pluginPomElements.add(new PomElement("build.plugins.plugin.artifactId", "spotless-maven-plugin"));
-
-        testable = new PomAnalyzer("build.plugins.plugin",
-                pluginPomElements,
-                resultCaller = mock(ResultCaller.class),
-                negateNext = mock(NegateNext.class),
-                errorMessages = new ArrayList<>());
-
-        when(negateNext.isNegateNext()).thenReturn(true);
-
-        Statement<PomAnalyzer> result = testable.havePluginExecutionInPhaseForGoal("test", "compile", "check");
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());

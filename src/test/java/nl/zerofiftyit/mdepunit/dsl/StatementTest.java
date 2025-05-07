@@ -1,6 +1,7 @@
 package nl.zerofiftyit.mdepunit.dsl;
 
 import nl.zerofiftyit.mdepunit.core.validation.ResultCaller;
+import nl.zerofiftyit.mdepunit.exception.PomValidationException;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,5 +43,55 @@ class StatementTest {
 
         assertEquals(testValue, result);
         verify(resultCaller).clearErrors();
+    }
+
+    @Test
+    void testOrWhenNegateNextIsFalse() {
+        when(negateNext.isNegateNext()).thenReturn(false);
+
+        String result = statement.or();
+
+        assertEquals(testValue, result);
+        verify(resultCaller, never()).clearErrors();
+        verify(resultCaller, never()).validate();
+    }
+
+    @Test
+    void testsOrWhenNegateNextIsTrue() {
+
+        when(negateNext.isNegateNext()).thenReturn(true);
+
+        String result = statement.or();
+
+        assertEquals(testValue, result);
+        verify(resultCaller, never()).clearErrors();
+        verify(resultCaller).validate();
+    }
+
+
+    @Test
+    void testOrWhenPomValidationThrowsIsIgnored() {
+
+        when(negateNext.isNegateNext()).thenReturn(true);
+        doThrow(new PomValidationException("test")).when(resultCaller).validate();
+
+        String result = statement.or();
+
+        assertEquals(testValue, result);
+        verify(resultCaller, never()).clearErrors();
+        verify(resultCaller).validate();
+    }
+
+    @Test
+    void testValidate() {
+        statement.validate();
+        verify(resultCaller).validate();
+    }
+
+    @Test
+    void testValidateWithReason() {
+        String reason = "test";
+        statement.validate(reason);
+        verify(resultCaller).validate(reason);
     }
 }
