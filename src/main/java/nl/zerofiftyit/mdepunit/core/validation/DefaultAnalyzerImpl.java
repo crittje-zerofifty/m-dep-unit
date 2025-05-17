@@ -1,5 +1,6 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
+import lombok.NonNull;
 import nl.zerofiftyit.mdepunit.api.DefaultAnalyzer;
 import nl.zerofiftyit.mdepunit.dsl.Statement;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
@@ -49,7 +50,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
     @Override
-    public Statement<DefaultAnalyzerImpl> haveTag(final String tagName) {
+    public Statement<DefaultAnalyzerImpl> haveTag(@NonNull final String tagName) {
         List<PomElement> elements = pomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith(tagName))
@@ -82,7 +83,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
      * @return a {@code ResultCaller} for validating the result and handling errors.
      */
     @Override
-    public Statement<DefaultAnalyzerImpl> containValue(final String value) {
+    public Statement<DefaultAnalyzerImpl> containValue(@NonNull final String value) {
         return filterValue(element -> {
             Object elementValue = element.getValue();
             return elementValue != null && elementValue.toString().contains(value);
@@ -90,7 +91,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
     }
 
     @Override
-    public final Statement<DefaultAnalyzerImpl> equalsValue(final String value) {
+    public final Statement<DefaultAnalyzerImpl> equalsValue(@NonNull final String value) {
         return filterValue(element -> {
             Object elementValue = element.getValue();
             return elementValue != null && elementValue.toString().contains(value);

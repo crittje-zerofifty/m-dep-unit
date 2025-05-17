@@ -1,6 +1,7 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
 import nl.zerofiftyit.mdepunit.exception.PomValidationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,5 +85,22 @@ class ResultCallerTest {
 
         assertEquals(0, errorMessages.size());
 
+    }
+
+    @Test
+    void testClearErrors() {
+
+        errorMessages.add("error1");
+
+        testable.clearErrors();
+
+        assertEquals(0, errorMessages.size());
+        assertDoesNotThrow(() -> testable.validate());
+    }
+
+    @Test
+    void testValidateWhenReasonIsNull() {
+
+        Assertions.assertThrows(NullPointerException.class, () -> testable.validate(null));
     }
 }

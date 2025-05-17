@@ -1,5 +1,6 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
+import lombok.NonNull;
 import nl.zerofiftyit.mdepunit.exception.PomValidationException;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public final class ResultCaller {
      */
     public void validate() {
         if (hasErrors) {
-            displayError();
+            throw new PomValidationException(stringBuilder.toString());
         }
     }
     /**
@@ -55,7 +56,7 @@ public final class ResultCaller {
      * @param reason the reason for validation, which will be included in any error message
      * @throws PomValidationException if validation fails due to the presence of error messages
      */
-    public void validate(final String reason) {
+    public void validate(@NonNull final String reason) {
         stringBuilder.insert(0, reason + "\n");
         validate();
     }
@@ -88,9 +89,5 @@ public final class ResultCaller {
         errorMessages.clear();
         stringBuilder.setLength(0);
         hasErrors = false;
-    }
-
-    private void displayError() {
-        throw new PomValidationException(stringBuilder.toString());
     }
 }

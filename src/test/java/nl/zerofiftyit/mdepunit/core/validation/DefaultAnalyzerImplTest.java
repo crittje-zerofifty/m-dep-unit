@@ -4,6 +4,7 @@ import nl.zerofiftyit.mdepunit.dsl.Statement;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ class DefaultAnalyzerImplTest {
     private List<String> errorMessages;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         pomElements = new ArrayList<>();
         resultCaller = mock(ResultCaller.class);
@@ -37,13 +38,8 @@ class DefaultAnalyzerImplTest {
         testable = new DefaultAnalyzerImpl("dependencies.dependency", pomElements, resultCaller, negateNext, errorMessages);
     }
 
-    @AfterEach
-    public void tearDown() {
-        verify(resultCaller).checkForErrors();
-    }
-
     @Test
-    public void testShouldHaveTagAndHas() {
+    void testShouldHaveTagAndHas() {
 
         List<Object> dependencies = new ArrayList<>();
         PomElement dependenciesElement = new PomElement("dependencies.dependency", dependencies);
@@ -60,10 +56,12 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
+
     }
 
     @Test
-    public void testShouldNotHaveTagButHas() {
+    void testShouldNotHaveTagButHas() {
 
         List<Object> dependencies = new ArrayList<>();
         PomElement dependenciesElement = new PomElement("dependencies.dependency", dependencies);
@@ -80,10 +78,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertEquals(2, errorMessages.size());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testShouldHaveTagAndHasNot() {
+    void testShouldHaveTagAndHasNot() {
 
         List<Object> dependencies = new ArrayList<>();
         PomElement dependenciesElement = new PomElement("dependencies.dependency", dependencies);
@@ -100,10 +99,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertEquals(1, errorMessages.size());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testShouldNotHaveTagAndHasNot() {
+    void testShouldNotHaveTagAndHasNot() {
 
         List<Object> dependencies = new ArrayList<>();
         PomElement dependenciesElement = new PomElement("dependencies.dependency", dependencies);
@@ -120,10 +120,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testContainsValueWhileItExpected() {
+    void testContainsValueWhileItExpected() {
 
         List<Object> modules = new ArrayList<>();
         PomElement mainModules = new PomElement("modules.module", modules);
@@ -142,10 +143,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testContainsValueWhileItNotExpected() {
+    void testContainsValueWhileItNotExpected() {
 
         List<Object> modules = new ArrayList<>();
         PomElement mainModules = new PomElement("modules.module", modules);
@@ -164,10 +166,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testContainsValueWhileExpectedHasNot() {
+    void testContainsValueWhileExpectedHasNot() {
 
         List<Object> modules = new ArrayList<>();
         PomElement mainModules = new PomElement("modules.module", modules);
@@ -186,10 +189,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testContainsValueWhileItNotExpectedAndShouldNot() {
+    void testContainsValueWhileItNotExpectedAndShouldNot() {
 
         List<Object> modules = new ArrayList<>();
         PomElement mainModules = new PomElement("modules.module", modules);
@@ -209,10 +213,11 @@ class DefaultAnalyzerImplTest {
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
         verify(resultCaller).checkForErrors();
+
     }
 
     @Test
-    public void testEqualsValueWhileItExpected() {
+    void testEqualsValueWhileItExpected() {
         PomElement element = new PomElement("project.version", "1.0.0");
         pomElements.add(element);
 
@@ -224,10 +229,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testEqualsValueWhileItNotExpected() {
+    void testEqualsValueWhileItIsNotExpected() {
         PomElement element = new PomElement("project.version", "1.0.0");
         pomElements.add(element);
 
@@ -239,10 +245,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testEqualsValueWhileExpectedHasNot() {
+    void testEqualsValueWhileExpectedHasNot() {
         PomElement element = new PomElement("project.version", "1.0.0");
         pomElements.add(element);
 
@@ -254,10 +261,11 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertFalse(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
     }
 
     @Test
-    public void testEqualsValueWhileItNotExpectedAndShouldNot() {
+    void testEqualsValueWhileItNotExpectedAndShouldNot() {
         PomElement element = new PomElement("project.version", "1.0.0");
         pomElements.add(element);
 
@@ -269,6 +277,42 @@ class DefaultAnalyzerImplTest {
 
         assertNotNull(result);
         assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
+    }
+
+    @Test
+    void testEqualsWhenPomElementIsNull() {
+        PomElement element = new PomElement("project.version", null);
+        pomElements.add(element);
+
+        testable = new DefaultAnalyzerImpl("project.version", pomElements, resultCaller, negateNext, errorMessages);
+
+        when(negateNext.isNegateNext()).thenReturn(true);
+
+        Statement<DefaultAnalyzerImpl> result = testable.equalsValue("1.0.0");
+
+        assertNotNull(result);
+        assertTrue(errorMessages.isEmpty());
+        verify(resultCaller).checkForErrors();
+    }
+
+    @Test
+    void testHaveTagWhenArgumentIsNull() {
+
+        Assertions.assertThrows(NullPointerException.class, () -> testable.haveTag(null));
+    }
+
+    @Test
+    void testContainValueWhenArgumentIsNull() {
+
+        Assertions.assertThrows(NullPointerException.class, () -> testable.containValue(null));
+
+    }
+
+    @Test
+    void testEqualsValueWhenArgumentIsNull() {
+
+        Assertions.assertThrows(NullPointerException.class, () -> testable.equalsValue(null));
     }
 }
 

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public final class PomAnalyzer extends DefaultAnalyzerImpl {
 
-    private final String givenNode;
     private List<PomElement> pomElements;
     private final ResultCaller resultCaller;
     private final NegateNext negateNext;
@@ -29,7 +28,6 @@ public final class PomAnalyzer extends DefaultAnalyzerImpl {
                        final ResultCaller resultCaller, final NegateNext negateNext,
                        final List<String> errorMessages) {
         super(givenNode, pomElements, resultCaller, negateNext, errorMessages);
-        this.givenNode = givenNode;
         this.pomElements = pomElements;
         this.resultCaller = resultCaller;
         this.negateNext = negateNext;

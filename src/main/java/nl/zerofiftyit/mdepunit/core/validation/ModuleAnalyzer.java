@@ -1,5 +1,6 @@
 package nl.zerofiftyit.mdepunit.core.validation;
 
+import lombok.NonNull;
 import nl.zerofiftyit.mdepunit.dsl.Statement;
 import nl.zerofiftyit.mdepunit.model.NegateNext;
 import nl.zerofiftyit.mdepunit.model.PomElement;
@@ -69,7 +70,7 @@ public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
      * @param moduleName the name of the module to check for existence and validity.
      * @return a {@code Statement<ModuleAnalyzer>} instance for further method chaining.
      */
-    public Statement<ModuleAnalyzer> moduleExists(final String moduleName) {
+    public Statement<ModuleAnalyzer> moduleExists(@NonNull final String moduleName) {
         final boolean moduleFound =
                 new File(moduleName).isDirectory() || new File(moduleName + "/pom.xml").exists();
 
@@ -112,7 +113,7 @@ public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
      * @return a {@code Statement<ModuleAnalyzer>} instance, enabling further method chaining
      *         within the {@code ModuleAnalyzer} class.
      */
-    public Statement<ModuleAnalyzer> containModuleNode(final String moduleName) {
+    public Statement<ModuleAnalyzer> containModuleNode(@NonNull final String moduleName) {
 
         super.containValue(moduleName);
         pomElements = super.getPomElements();
