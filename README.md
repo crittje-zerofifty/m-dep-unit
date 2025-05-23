@@ -6,7 +6,9 @@
 
 Maven POM files can become complex and difficult to manage, especially when working with multiple team members on the same project. Without proper validation and enforcement of standards, POM files can quickly become messy and inconsistent, leading to dependency conflicts, versioning issues, and other problems that are difficult to debug.
 
-mDepUnit was created to address these challenges by providing a way to verify your POM agreements early in the development process (at compile time). By defining and enforcing rules for your POM files, you can ensure consistency across your projects and prevent common issues before they occur.
+mDepUnit was created to address these challenges by providing a way to verify your POM agreements early in the 
+development process (at test time). By defining and enforcing rules for your POM files, you can ensure consistency 
+across your projects and prevent common issues before they occur.
 
 ## Prerequisites
 
@@ -164,11 +166,15 @@ By running these tests as part of your build process, you can catch POM issues e
 
 ## Benefits
 
-- **Early Detection**: Catch POM issues at compile time rather than runtime
+- **Early Detection**: Catch POM issues at test time rather than runtime
 - **Consistency**: Enforce team standards for POM structure and content
 - **Automation**: Integrate POM validation into your CI/CD pipeline
 - **Flexibility**: Create custom validation rules for your specific project needs
 
+## Contributing
+
+Before submitting a Pull Request, please read our [PR Policy](.github/PULL_REQUEST_POLICY.md) to understand the requirements and process for contributing to this project.
+
 ## License
 
-This project is licensed under the terms of the license included in the repository.
+This project is licensed under the [MIT License](LICENSE). See the LICENSE file in the repository root for the full license text.
