@@ -58,15 +58,20 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
 
         boolean hasTag = !elements.isEmpty();
 
-        if (negateNext.isNegateNext() && hasTag) {
-            errorMessages.add(String.format(
-                    "%s found in %s where it is not allowed. \nFound disallowed value: ",
-                    tagName, givenNode));
-            elements.forEach(element -> errorMessages.add(
-                    "- " + element.getValue().toString()));
-        } else if (!negateNext.isNegateNext() && !hasTag) {
-            errorMessages.add(String.format(
-                    "No %s found in %s where it is required", tagName, givenNode));
+        // XNOR: true when both operands are the same (both true or both false)
+        boolean expectationMismatch = !(negateNext.isNegateNext() ^ hasTag);
+
+        if (expectationMismatch) {
+            if (negateNext.isNegateNext()) {
+                errorMessages.add(String.format(
+                        "%s found in %s where it is not allowed. \nFound disallowed value: ",
+                        tagName, givenNode));
+                elements.forEach(element -> errorMessages.add(
+                        "- " + element.getValue().toString()));
+            } else {
+                errorMessages.add(String.format(
+                        "No %s found in %s where it is required", tagName, givenNode));
+            }
         }
 
         resultCaller.checkForErrors();
@@ -108,13 +113,14 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
 
         boolean containsValue = !elements.isEmpty();
 
-        if (negateNext.isNegateNext() && containsValue) {
-            errorMessages.add(String.format(
-                    "Value '%s' found in %s where it is not allowed", value, givenNode));
+        // XNOR: true when both operands are the same (both true or both false)
+        boolean expectationMismatch = negateNext.isNegateNext() == containsValue;
 
-        } else if (!negateNext.isNegateNext() && !containsValue) {
-            errorMessages.add(String.format(
-                    "Value '%s' not found in %s where it is required", value, givenNode));
+        if (expectationMismatch) {
+            String template = negateNext.isNegateNext()
+                ? "Value '%s' found in %s where it is not allowed"
+                : "Value '%s' not found in %s where it is required";
+            errorMessages.add(String.format(template, value, givenNode));
         }
 
         resultCaller.checkForErrors();

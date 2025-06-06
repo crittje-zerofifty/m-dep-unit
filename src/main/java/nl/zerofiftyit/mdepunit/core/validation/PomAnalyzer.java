@@ -63,12 +63,13 @@ public final class PomAnalyzer extends DefaultAnalyzerImpl {
 
         boolean hasProperty = !properties.isEmpty();
 
-        if (negateNext.isNegateNext() && hasProperty) {
-            errorMessages.add(String.format(
-                    "Property '%s' found where not allowed", propertyName));
-        } else if (!negateNext.isNegateNext() && !hasProperty) {
-            errorMessages.add(String.format(
-                    "Required property '%s' not found", propertyName));
+        boolean expectationMismatch = negateNext.isNegateNext() == hasProperty;
+
+        if (expectationMismatch) {
+            String template = negateNext.isNegateNext()
+                ? "Property '%s' found where not allowed"
+                : "Required property '%s' not found";
+            errorMessages.add(String.format(template, propertyName));
         }
 
         resultCaller.checkForErrors();

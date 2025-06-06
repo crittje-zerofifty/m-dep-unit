@@ -44,17 +44,14 @@ public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
      * Adds an error message if the module is not a directory or does not include the `pom.xml`
      * file.
      * Uses the {@code ResultCaller} for error validation after the check.
-     *<p>
      * For example,
      * <pre>
      * &lt;modules&gt;
      *     &lt;module&gt;my-module&lt;/module&gt;
      * &lt;/modules&gt;
      * </pre>
-     * </p>
      * could be verified as follows:
      *
-     * <p>
      * <pre>
      * {@code
      * pomAnalyzer()
@@ -66,7 +63,6 @@ public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
      *   .validate();
      * }
      * </pre>
-     * </p>
      * @param moduleName the name of the module to check for existence and validity.
      * @return a {@code Statement<ModuleAnalyzer>} instance for further method chaining.
      */
@@ -74,12 +70,13 @@ public final class ModuleAnalyzer extends DefaultAnalyzerImpl {
         final boolean moduleFound =
                 new File(moduleName).isDirectory() || new File(moduleName + "/pom.xml").exists();
 
-        if (!negateNext.isNegateNext() && !moduleFound) {
-            errorMessages.add(String.format("Module '%s' directory or pom file not found while "
-                    + "expected", moduleName));
-        } else if (negateNext.isNegateNext() && moduleFound) {
-            errorMessages.add(String.format("Module '%s' directory or pom file found, but not "
-                    + "expected", moduleName));
+        boolean expectationMismatch = negateNext.isNegateNext() == moduleFound;
+
+        if (expectationMismatch) {
+            String template = negateNext.isNegateNext()
+                ? "Module '%s' directory or pom file found, but not expected"
+                : "Module '%s' directory or pom file not found while expected";
+            errorMessages.add(String.format(template, moduleName));
         }
         resultCaller.checkForErrors();
 

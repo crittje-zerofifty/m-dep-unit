@@ -44,8 +44,8 @@ public final class NegateNext {
      * Returns a string representation of the "NegateNext" object, including
      * the current state of the "negateNext" flag.
      *
-     * @return a string in the format "NegateNext{negateNext=<state>}",
-     *         where <state> is the current boolean value of the "negateNext" flag
+     * @return a string in the format "NegateNext{negateNext=state}",
+     *         where state is the current boolean value of the "negateNext" flag
      */
     @Override
     public String toString() {

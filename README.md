@@ -175,6 +175,10 @@ By running these tests as part of your build process, you can catch POM issues e
 
 Before submitting a Pull Request, please read our [PR Policy](.github/PULL_REQUEST_POLICY.md) to understand the requirements and process for contributing to this project.
 
+## Deployment to Maven Central
+
+This project is configured to automatically deploy to Maven Central when changes are merged to the main branch. For more information on how this works and how to set up the required secrets, see the [Maven Central Deployment](.github/MAVEN_CENTRAL_DEPLOYMENT.md) documentation.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE). See the LICENSE file in the repository root for the full license text.

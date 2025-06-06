@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/test/java/it
+.mvn/settings.xml
 
 ### IntelliJ IDEA ###
 .idea/
