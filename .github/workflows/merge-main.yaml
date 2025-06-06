@@ -10,11 +10,15 @@
 name: Java CI/CD to main
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches: [ "main" ]
 
+
 jobs:
-  publish:
+  publish_if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: read
