@@ -4,7 +4,7 @@
 
   <groupId>nl.zerofifty-it</groupId>
   <artifactId>mdepunit</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>jar</packaging>
 
   <name>mDepUnit</name>
@@ -48,6 +48,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
+    <revision>0.0.1-SNAPSHOT</revision>
     <lombok.version>1.18.38</lombok.version>
     <jackson.dataformat.version>2.18.3</jackson.dataformat.version>
     <junit.version>5.12.1</junit.version>
@@ -68,7 +69,6 @@
           <useReleaseProfile>false</useReleaseProfile>
           <releaseProfiles>release</releaseProfiles>
           <goals>deploy</goals>
-          <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
       <plugin>

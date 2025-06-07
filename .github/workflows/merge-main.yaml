@@ -36,6 +36,16 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Get version
+        id: get_version
+        run: |
+          if git rev-list --tags --max-count=1 &>/dev/null; then
+            LATEST_TAG=$(git describe --tags --abbrev=0)
+          else
+            LATEST_TAG="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          fi
+          echo "version=$LATEST_TAG" >> $GITHUB_OUTPUT
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
@@ -44,11 +54,15 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Update version
+        run: | 
+          mvn build-helper:parse-version versions:set 
+          -DnewVersion=0.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
+
       - name: Publish package
         run: mvn --batch-mode deploy -P github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
 ## todo for mvn central
 #      - name: Set up JDK 11
