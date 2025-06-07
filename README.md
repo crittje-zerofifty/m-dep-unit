@@ -1,6 +1,6 @@
 # mDepUnit
 
-![Coverage](.github/badges/jacoco.svg)
+[![codecov](https://codecov.io/gh/crittje-zerofifty/m-dep-unit/graph/badge.svg?token=EM5SUREB71)](https://codecov.io/gh/crittje-zerofifty/m-dep-unit)
 
 ## Motivation
 
@@ -36,7 +36,7 @@ mDepUnit provides a fluent API for validating POM files. Here are some examples 
 
 ```java
 // Validate that dependencies don't have explicit version tags
-analyzePom("pom.xml")
+analyzePom()
     .checking("dependencies.dependency")
     .shouldNot()
     .haveTag("version")
