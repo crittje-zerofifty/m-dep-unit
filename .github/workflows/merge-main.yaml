@@ -73,6 +73,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
+          server-id: central
           server-username: ${{ secrets.MAVEN_CENTRAL_REPO_PORTAL_USERNAME }}
           server-password: $${{ secrets.MAVEN_CENTRAL_REPO_PORTAL_PASSWORD }}
           gpg-private-key: ${{ secrets.MAVEN_GPG_SIGNING_KEY }}
