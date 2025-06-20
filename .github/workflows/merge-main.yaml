@@ -84,7 +84,7 @@ jobs:
           MAVEN_CENTRAL_REPO_PORTAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_REPO_PORTAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
-          mvn --no-transfer-progress -B clean deploy -P release
+          mvn --no-transfer-progress -B clean deploy -P release -s .mvn/settings.xml
 
       - name: Update Git Tag
         run: |
