@@ -177,7 +177,7 @@ Before submitting a Pull Request, please read our [PR Policy](.github/PULL_REQUE
 
 ## Deployment to Maven Central
 
-This project is configured to automatically deploy to Maven Central when changes are merged to the main branch. For more information on how this works and how to set up the required secrets, see the [Maven Central Deployment](.github/MAVEN_CENTRAL_DEPLOYMENT.md) documentation.
+This project is configured to automatically deploy to Maven Central when changes are merged to the main branch.
 
 ## License
 
