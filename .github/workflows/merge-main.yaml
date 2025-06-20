@@ -86,8 +86,7 @@ jobs:
         env:
           MAVEN_CENTRAL_REPO_PORTAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_REPO_PORTAL_USERNAME }}
           MAVEN_CENTRAL_REPO_PORTAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_REPO_PORTAL_PASSWORD }}
-          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_SIGNING_KEY }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
           mvn --no-transfer-progress -B clean deploy -P release
 
