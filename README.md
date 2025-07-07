@@ -30,7 +30,40 @@ Add mDepUnit to your project as a dependency:
 
 ## Usage
 
-mDepUnit provides a fluent API for validating POM files. Here are some examples of how to use it:
+mDepUnit provides a fluent API for validating POM files. It is easy to integrate with your unit tests. Here are some 
+## Integration with Unit Tests
+
+You can integrate mDepUnit validations into your unit tests to ensure that your POM files comply with your team's standards. Here's an example:
+
+```java
+import org.junit.jupiter.api.Test;
+import java.io.IOException;
+import static nl.zerofiftyit.mdepunit.core.validation.InitAnalyzer.analyzePom;
+
+public class PomValidationTest {
+
+    @Test
+    public void testPomCompliance() throws IOException {
+        // Ensure dependencies don't have explicit versions. Custom validation return message
+        analyzePom()
+            .checking("dependencies.dependency")
+            .shouldNot()
+            .haveTag("version")
+            .validate("Because versions are set in dependency management section");
+
+        // Ensure all dependencies have groupId and artifactId
+        analyzePom()
+            .checking("dependencies.dependency")
+            .should()
+            .haveTag("groupId")
+            .and()
+            .haveTag("artifactId")
+            .validate();
+    }
+}
+```
+
+examples of how to use it:
 
 ### Basic Validation
 
@@ -81,6 +114,9 @@ analyzePom()
 ```
 
 ### Module-Specific Validations
+There are also convenience methods. They are included in for example `checkingModule`. Such methods have specific 
+chainable functions as well that are not applicable on the general `checking`. In this case you can verify whether a 
+given module really exists.
 
 ```java
 // Validate that modules contain a specific value
@@ -130,38 +166,6 @@ analyzePom("pom.xml")
     .validate("Because we have decided to have versions only in Dependency Management, See ADR-001 for more information");
 ```
 
-## Integration with Unit Tests
-
-You can integrate mDepUnit validations into your unit tests to ensure that your POM files comply with your team's standards. Here's an example:
-
-```java
-import org.junit.jupiter.api.Test;
-import java.io.IOException;
-import static nl.zerofiftyit.mdepunit.core.validation.InitAnalyzer.analyzePom;
-
-public class PomValidationTest {
-
-    @Test
-    public void testPomCompliance() throws IOException {
-        // Ensure dependencies don't have explicit versions
-        analyzePom()
-            .checking("dependencies.dependency")
-            .shouldNot()
-            .haveTag("version")
-            .validate();
-
-        // Ensure all dependencies have groupId and artifactId
-        analyzePom()
-            .checking("dependencies.dependency")
-            .should()
-            .haveTag("groupId")
-            .and()
-            .haveTag("artifactId")
-            .validate();
-    }
-}
-```
-
 By running these tests as part of your build process, you can catch POM issues early and ensure consistency across your project.
 
 ## Benefits
@@ -175,9 +179,14 @@ By running these tests as part of your build process, you can catch POM issues e
 
 Before submitting a Pull Request, please read our [PR Policy](.github/PULL_REQUEST_POLICY.md) to understand the requirements and process for contributing to this project.
 
+### GPG keys
+Be aware that GPG keys are required for contributing. 
+Read the [manual of Github](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) how to add them to your account.
+
 ## Deployment to Maven Central
 
-This project is configured to automatically deploy to Maven Central when changes are merged to the main branch.
+This project is configured to automatically deploy to Maven Central when changes are merged to the main branch. 
+Publishing requires an approval still. This might be subject to change.
 
 ## License
 
