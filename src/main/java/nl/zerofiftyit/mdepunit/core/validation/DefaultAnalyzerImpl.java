@@ -14,6 +14,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
 
     private final String givenNode;
     private List<PomElement> pomElements;
+    private final List<PomElement> originalPomElements;
     private final ResultCaller resultCaller;
     private final NegateNext negateNext;
     private final List<String> errorMessages;
@@ -37,6 +38,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
                                final List<String> errorMessages) {
         this.givenNode = givenNode;
         this.pomElements = pomElements;
+        this.originalPomElements = pomElements;
         this.resultCaller = resultCaller;
         this.negateNext = negateNext;
         this.errorMessages = errorMessages;
@@ -51,7 +53,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
      */
     @Override
     public Statement<DefaultAnalyzerImpl> haveTag(@NonNull final String tagName) {
-        List<PomElement> elements = pomElements.stream()
+        List<PomElement> elements = originalPomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(element -> element.getPath().endsWith(tagName))
                 .collect(Collectors.toList());
@@ -59,7 +61,7 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
         boolean hasTag = !elements.isEmpty();
 
         // XNOR: true when both operands are the same (both true or both false)
-        boolean expectationMismatch = !(negateNext.isNegateNext() ^ hasTag);
+        boolean expectationMismatch = negateNext.isNegateNext() == hasTag;
 
         if (expectationMismatch) {
             if (negateNext.isNegateNext()) {
@@ -99,14 +101,14 @@ public class DefaultAnalyzerImpl implements DefaultAnalyzer {
     public final Statement<DefaultAnalyzerImpl> equalsValue(@NonNull final String value) {
         return filterValue(element -> {
             Object elementValue = element.getValue();
-            return elementValue != null && elementValue.toString().contains(value);
+            return elementValue != null && elementValue.toString().equals(value);
         }, value);
     }
 
     private Statement<DefaultAnalyzerImpl> filterValue(final Predicate<PomElement> valuePredicate,
                                                        final String value) {
 
-        List<PomElement> elements = pomElements.stream()
+        List<PomElement> elements = originalPomElements.stream()
                 .filter(element -> element.getPath().startsWith(givenNode))
                 .filter(valuePredicate)
                 .collect(Collectors.toList());
