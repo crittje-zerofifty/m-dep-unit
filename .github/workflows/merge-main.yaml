@@ -44,8 +44,8 @@ jobs:
         id: get_version
         run: |
           if [[ $(git rev-list --tags --max-count=1) ]]; then
-            echo $(git describe --tags --abbrev=0)
-            LATEST_TAG=$(git describe --tags --abbrev=0)
+            echo $(git describe --tags $(git rev-list --tags --max-count=1))
+            LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           else
             echo "I dont like this"
             LATEST_TAG="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
