@@ -8,6 +8,7 @@ import nl.zerofiftyit.mdepunit.model.NegateNext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The {@code PomAnalyzer} class provides functionality for analyzing and
@@ -75,7 +76,8 @@ public final class InitAnalyzer implements CheckPom {
      *         negation and error handling logic
      */
     @Override
-    public Inclusion<PomAnalyzer> checking(final String givenNode) {
+    public Inclusion<PomAnalyzer> checking(String givenNode) {
+        givenNode = Objects.equals(givenNode, "project") ? "" : givenNode;
         ResultCaller resultCaller = new ResultCaller(errorMessages);
         return new Inclusion<>(
                 new PomAnalyzer(givenNode, pomReader.getAllElements(), resultCaller, negateNext,

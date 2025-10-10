@@ -26,6 +26,15 @@ class InitAnalyzerTest {
         assertNotNull(InitAnalyzer.analyzePom(pomFilePath));
     }
 
+
+    @Test
+    void testCheckingForGivenNodeProject() throws IOException {
+
+        Inclusion<PomAnalyzer> result = InitAnalyzer.analyzePom().checking("project");
+
+        assertEquals(Inclusion.class, result.getClass());
+    }
+
     @Test
     void testCheckingForGivenNodeReturnsInclusion() throws IOException {
 
