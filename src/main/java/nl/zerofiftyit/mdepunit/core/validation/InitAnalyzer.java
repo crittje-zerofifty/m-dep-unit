@@ -76,11 +76,11 @@ public final class InitAnalyzer implements CheckPom {
      *         negation and error handling logic
      */
     @Override
-    public Inclusion<PomAnalyzer> checking(String givenNode) {
-        givenNode = Objects.equals(givenNode, "project") ? "" : givenNode;
+    public Inclusion<PomAnalyzer> checking(final String givenNode) {
         ResultCaller resultCaller = new ResultCaller(errorMessages);
         return new Inclusion<>(
-                new PomAnalyzer(givenNode, pomReader.getAllElements(), resultCaller, negateNext,
+                new PomAnalyzer(Objects.equals(givenNode, "project") ? "" : givenNode,
+                        pomReader.getAllElements(), resultCaller, negateNext,
                         errorMessages), negateNext
         );
     }
